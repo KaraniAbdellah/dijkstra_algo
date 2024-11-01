@@ -28,6 +28,7 @@
 	// strcuture definition
 	typedef struct Node {
 		int data;
+		int weight;
 		struct Node* next;
 	} Node;
 	
@@ -40,7 +41,9 @@
 
 	// fonctions prototypes
 	void printHello();
-	void init_graph(int n, List** graph);
+	void init_graph(int n, List *graph);
+	void add_node_to_graph(List *graph, int src, int dest, int weight);
+	void display_graph(List *graph, int n);
 
 
 

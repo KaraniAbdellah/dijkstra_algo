@@ -1,14 +1,15 @@
 CC=gcc
 CFLAGS = -Wall -Wextra
 EXEC=main
-FILIES=fun.c main.c
+FILES=fun.c main.c
 
-build:
-	$(CC) $(CFALGS) $(FILIES) -o $(EXEC)
-
+build: vis
+	$(CC) $(CFLAGS) $(FILES) -o $(EXEC)
 
 clean:
-	rm $(EXEC)
+	rm $(EXEC) g.dot g.png  # Clean up the generated files
 
+vis:
+	make -Bnd | make2graph | dot -Tpng g.dot -o g.png  # Generate the PNG from g.dot
 
 
