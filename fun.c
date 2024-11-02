@@ -66,7 +66,7 @@ void display_graph(List *graph, int n) {
 			printf(WARNING "[%d, %d] --> ", temp->data, temp->weight);
 			
 			// Write the edge to the DOT file
-            fprintf(p_file, "    %d -> %d;\n", i, temp->data);
+            fprintf(p_file, "%d -> %d;\n", i, temp->data);
 			temp = temp->next;
 		}
 		printf("\n" RESET);
