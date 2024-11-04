@@ -55,7 +55,7 @@ void add_node_to_graph(List *graph, int src, int dest, int weight) {
 void display_graph(List *graph, int n) {
 
 	// open dot file
-	FILE *p_file = fopen("g.dot", "w");
+	FILE *p_file = fopen("dot/g.dot", "w");
 	fprintf(p_file, "digraph G {\n");
 	
 	printf(BLUE "---------- Graph ----------\n" RESET);
@@ -67,12 +67,8 @@ void display_graph(List *graph, int n) {
 			printf(WARNING "[%d, %d] --> ", temp->data, temp->weight);
 			
 			// Write the edge to the DOT file
-<<<<<<< HEAD
-            fprintf(p_file, "    %d -> %d;\n", i, temp->data);
-            
-=======
             fprintf(p_file, "%d -> %d;\n", i, temp->data);
->>>>>>> 01d1558f7e5fb79716314047c0a5b6f18d3f5d0f
+            
 			temp = temp->next;
 			
 		}

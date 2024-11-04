@@ -15,8 +15,7 @@ sudo apt-get install graphviz
 
 <p>Graphviz is a tool that helps you create diagrams or graphs using text commands
 You write a description of your graph, and Graphviz turns it into an image.
-it generate image from DOT files.
-</p>
+it generate image from DOT files.</p>
 
 <br>
 <b>Graphviz takes a DOT file and generates a PNG image (or other image formats) of the graph.</b>
