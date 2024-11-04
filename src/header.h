@@ -14,6 +14,8 @@
 
 #ifndef TASK
 #define TASK
+	
+	#define n 10
 
 	// Define Colors
 	#define RED "\033[1;31m"
@@ -41,9 +43,10 @@
 
 	// fonctions prototypes
 	void printHello();
-	void init_graph(int n, List *graph);
+	void init_graph(List *graph);
 	void add_node_to_graph(List *graph, int src, int dest, int weight);
-	void display_graph(List *graph, int n);
+	void display_graph(List *graph);
+	void find_short_path(List *graph);
 
 
 
