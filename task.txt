@@ -1,4 +1,3 @@
-// Try To understand the Generating images
 // Start Think About Djikstra
 
 

@@ -63,11 +63,14 @@ void display_graph(List *graph, int n) {
 		Node *temp = graph[i].head;
 		printf("Node %d: ", i);
 		while (temp != NULL) {
+		
 			printf(WARNING "[%d, %d] --> ", temp->data, temp->weight);
 			
 			// Write the edge to the DOT file
             fprintf(p_file, "    %d -> %d;\n", i, temp->data);
+            
 			temp = temp->next;
+			
 		}
 		printf("\n" RESET);
 	}
@@ -76,8 +79,6 @@ void display_graph(List *graph, int n) {
 	fclose(p_file);
 
 }
-
-
 
 
 

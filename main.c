@@ -16,18 +16,7 @@ int main() {
 	add_node_to_graph(graph, 1, 1, 5);
 
 	display_graph(graph, n);
-		
-		
+
+
 	return 0;
 }
-
-
-
-
-
-
-// if (src >= n || dest >= n) printf(RED "Out of range" RESET);
-
-
-
-
