@@ -47,6 +47,7 @@
 	void add_node_to_graph(List *graph, int src, int dest, int weight);
 	void display_graph(List *graph);
 	void find_short_path(List *graph);
+	int is_exit(int choosed_ele, List *graph, int searched_ele);
 
 
 
