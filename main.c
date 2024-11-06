@@ -6,22 +6,38 @@
 
 int main() {
 	
+	int n;
+	printf("Enter number of nodes: ");
+	scanf("%d", &n);
+	printf(BLUE "\nwe want to go from 0 to %d\n\n", n - 1); printf(RESET);
+	
 	List *graph = (List *) malloc(sizeof(List) * n); // graph pointe to "n space"
-	init_graph(graph);
+	init_graph(graph, n);
 	
-	add_node_to_graph(graph, 0, 1, 3);
-	add_node_to_graph(graph, 0, 2, 1);
-	add_node_to_graph(graph, 1, 3, 3);
-	add_node_to_graph(graph, 2, 4, 5);
-	add_node_to_graph(graph, 1, 2, 1);
-	add_node_to_graph(graph, 2, 3, 3);
-	add_node_to_graph(graph, 3, 5, 3);
-	add_node_to_graph(graph, 3, 4, 1);
-	add_node_to_graph(graph, 4, 5, 1);
+	int src, dest, weight;
+	char choice;
 
-	display_graph(graph);
+	while (1) {
+		printf("Enter source node: ");
+		scanf("%d", &src);
+		printf("Enter destination node: ");
+		scanf("%d", &dest);
+		printf("From %d to %d what is weight: ", src, dest);
+		scanf("%d", &weight);
+
+		add_node_to_graph(graph, src, dest, weight, n);
+
+		printf("Do you want to add another connection? (y/n): ");
+		scanf(" %c", &choice);
+		if (choice != 'y' && choice != 'Y') {
+		    break;
+		}
+	}
+
 	
-	find_short_path(graph);
+	display_graph(graph, n);
+	
+	find_short_path(graph, n);
 
 
 	return 0;

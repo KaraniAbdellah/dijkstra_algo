@@ -16,7 +16,7 @@ void error_msg() {
 }
 
 // initialize the graph
-void init_graph(List *graph) {
+void init_graph(List *graph, int n) {
 	
 	for (int i = 0; i < n; i++) {
 		graph[i].head = NULL;
@@ -39,7 +39,7 @@ Node *create_node() {
 }
 
 // add node to graph
-void add_node_to_graph(List *graph, int src, int dest, int weight) {
+void add_node_to_graph(List *graph, int src, int dest, int weight, int n) {
 	
 	if (src < 0 || dest < 0 || src >= n || dest >= n) {
 		error_msg();
@@ -76,7 +76,7 @@ void add_node_to_graph(List *graph, int src, int dest, int weight) {
 }
 
 // display nodes graph's
-void display_graph(List *graph) {
+void display_graph(List *graph, int n) {
 
 	// open dot file
 	FILE *p_file = fopen("dot/g.dot", "w");
@@ -85,7 +85,7 @@ void display_graph(List *graph) {
 	int visited[n];
 	for (int i = 0; i < n; i++) visited[i] = -1;
 	
-	printf(BLUE "---------- Graph ----------\n" RESET);
+	printf(BLUE "\n---------- Graph ----------\n" RESET);
 	for (int i = 0; i < n; i++) {
 		Node *temp = graph[i].head;
 		printf("Node %d: ", i);
@@ -106,97 +106,164 @@ void display_graph(List *graph) {
 	
 	fprintf(p_file, "}\n");
 	fclose(p_file);
+	printf(BLUE "---------------------------\n" RESET);
 
 }
 
 
-
-/*
-	in this function we suppose:
-		start ele is "0"
-		end ele is "big ele"
-*/
-
-int is_exit(int choosed_ele, List *graph, int searched_ele) {
+int is_exit_connection(int choosed_ele, List *graph, int searched_ele) {
 	
 	Node *temp = graph[choosed_ele].head;
 	while (temp != NULL) {
 		if (temp->data == searched_ele) return temp->weight;
 		temp = temp->next;
 	}
-	return 0;
+	return -1;
 	
 }
 
-void find_short_path(List *graph) {
+int is_visited(int *R, int searched_ele, int count) {
 	
-	// create & initialze
-	int matrix[n][n];
-	int R[n];
-	int nodes[6] = {0, 1, 2, 3, 4, 5};
-	int nodes_len = sizeof(nodes) / sizeof(nodes[0]);
+	for (int i = 0; i < count + 1; i++) {
+		if (R[i] != -1 && R[i] == searched_ele) return 1;
+	}
+	return 0;
+}
+
+void find_min_in_row(int n, int matrix[n][n], int nodes[n], int nodes_len, int row, int *min, int *new_node) {
+	
+	for (int k = 0; k < nodes_len; k++) {
+		if ((matrix[row][k] != -1 && matrix[row][k] < *min) || *min == -1) {
+			*min = matrix[row][k];
+			*new_node = nodes[k];
+			// printf("min = %d\n", min);
+		}
+	}
+	
+}
+
+void display_short_path(int *R, int n) {
+	
+	printf("Shortest path: ");
+	for (int i = 0; i < n; i++) {
+		if (R[i] != -1) printf("%d ", R[i]);
+	}
+	printf("\n");
+	
+}
+
+void initialize(int n, int *R, int *Min, int (*matrix)[n], int *nodes) {
+	
 	for (int i = 0; i < n; i++) R[i] = -1;
+	for (int i = 0; i < n; i++) Min[i] = -1;
+	for (int i = 0; i < n; i++) nodes[i] = i;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			matrix[i][j] = -1;
 		}
 	}
+
+}
+
+int get_distance(int *Min, int n) {
 	
+	for (int i = n - 1; i >= 0; i--) {
+		if (Min[i] != -1) return Min[i];
+	} return -1;
+	
+}
+
+void display_theory(int n, int (*matrix)[n], int *R, int *Min, int *nodes) {
+
+	printf(BLUE "\n---------------------------\n" RESET);
+    for (int i = 0; i < n; i++) printf("%d | ", nodes[i]);
+    printf("selection sommet\n");
+    printf(WHITE "---------------------------\n" RESET);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] != -1) 
+                printf("%d | ", matrix[i][j]);
+            else 
+                printf("& | ");
+        }
+        printf("%d (%d)\n", R[i], Min[i]);
+    }
+    printf(BLUE "---------------------------\n\n" RESET);
+}
+
+
+void find_short_path(List *graph, int n) {
+	
+	// create & initialze
+	int matrix[n][n];
+	int R[n];
+	int Min[n];
+	int nodes[n];
+	initialize(n, R, Min, matrix, nodes);
+	int nodes_len = sizeof(nodes) / sizeof(nodes[0]);
+
+	// start searching about short path
 	R[0] = 0;
+	Min[0] = 0;
 	int count = 0;
 	for (int i = 0; i < n; i++) {
 		int choosed_ele = R[count];
+		if (choosed_ele == n) break;
 		
 		// is graph[choosed_ele] contains nodes eles
 		for (int j = 0; j < nodes_len; j++) {
 			if (nodes[j] != choosed_ele) {
 				int searched_ele = nodes[j];
-				int check = is_exit(choosed_ele, graph, searched_ele);
-				if (check != 0) {
-					if (count - 1 <= 0) matrix[i][searched_ele] = check + R[count - 1];
-					else matrix[i][searched_ele] = check;
+				// check if node already visited
+				int check_visited_node = is_visited(R, searched_ele, count);
+				if (check_visited_node == 0) {
+					int weight = is_exit_connection(choosed_ele, graph, searched_ele);
+					if (weight != -1) {
+						if (count > 0) {
+							matrix[i][j] = weight + Min[count];
+							if (i > 0 && matrix[i - 1][j] != -1) {
+								matrix[i][j] = (matrix[i - 1][j] < matrix[i][j]) ? matrix[i - 1][j] : matrix[i][j];
+							}
+						}
+						else matrix[i][j] = weight;
+						// printf("weight = %d, searched_ele = %d, choosed_ele = %d, x = %d\n", weight,
+						/// searched_ele, choosed_ele, matrix[i][j]);
+					}
 				}
 			}
 		}
 		
 		// find the min number
 		int min = matrix[i][0];
-		int new_searched_ele;
-		for (int k = 1; k < n; k++) {
-			if (matrix[i][k] != -1 && matrix[i][k] < min) {
-				min = matrix[i][k];
-				new_searched_ele = nodes[k];
-			}
-		}
+		int new_node;
 		
-		// to find another node
+		find_min_in_row(n, matrix, nodes, nodes_len, i, &min, &new_node);
+		
+		
+		
+		// add visited node & add Min ele
 		count++;
-		R[count] = new_searched_ele;
+		Min[count] = min;
+		R[count] = new_node;
+		
 	}
 	
-	printf("Shorted path: ");
-	for (int i = 0; i < n; i++) {
-		if (R[i] != -1) printf("%d ", R[i]);
-	}
+	// display the shortest path
+	display_short_path(R, n);
+	
+	// display the distance
+	int distance = get_distance(Min, n);
+	printf("Distance = %d\n", distance);
+	
+	// display the Theory
+	display_theory(n, matrix, R, Min, nodes);
 	
 	
 	
 }
 
 
-
-// try to repeat this please
-
-
-
-
-
-
-
-/*
-	fprintf(p_file, "%d -> %d [label=\"%d\"];\n", i, temp->data, temp->weight);
-	fprintf(p_file, "digraph G {\n");
-*/
 
 
 
