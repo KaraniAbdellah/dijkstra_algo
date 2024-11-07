@@ -1,6 +1,6 @@
-// Start Think About Djikstra
-
-
+// make a video.
+// make a post in linkedin.
+// publich the video and post.
 
 
 

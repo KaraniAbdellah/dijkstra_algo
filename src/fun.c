@@ -85,7 +85,7 @@ void display_graph(List *graph, int n) {
 	int visited[n];
 	for (int i = 0; i < n; i++) visited[i] = -1;
 	
-	printf(BLUE "\n---------- Graph ----------\n" RESET);
+	printf(BLUE "\n\n\n---------- Graph ----------\n\n" RESET);
 	for (int i = 0; i < n; i++) {
 		Node *temp = graph[i].head;
 		printf("Node %d: ", i);
@@ -106,7 +106,7 @@ void display_graph(List *graph, int n) {
 	
 	fprintf(p_file, "}\n");
 	fclose(p_file);
-	printf(BLUE "---------------------------\n" RESET);
+	printf(BLUE "\n---------------------------\n" RESET);
 
 }
 
@@ -144,9 +144,9 @@ void find_min_in_row(int n, int matrix[n][n], int nodes[n], int nodes_len, int r
 
 void display_short_path(int *R, int n) {
 	
-	printf("Shortest path: ");
+	printf(GREEN "\nShortest path: ");
 	for (int i = 0; i < n; i++) {
-		if (R[i] != -1) printf("%d ", R[i]);
+		if (R[i] != -1) printf("%d --> ", R[i]);
 	}
 	printf("\n");
 	
@@ -175,7 +175,7 @@ int get_distance(int *Min, int n) {
 
 void display_theory(int n, int (*matrix)[n], int *R, int *Min, int *nodes) {
 
-	printf(BLUE "\n---------------------------\n" RESET);
+	printf(BLUE "\n---------------------------\n\n" RESET);
     for (int i = 0; i < n; i++) printf("%d | ", nodes[i]);
     printf("selection sommet\n");
     printf(WHITE "---------------------------\n" RESET);
@@ -189,7 +189,7 @@ void display_theory(int n, int (*matrix)[n], int *R, int *Min, int *nodes) {
         }
         printf("%d (%d)\n", R[i], Min[i]);
     }
-    printf(BLUE "---------------------------\n\n" RESET);
+    printf(BLUE "\n---------------------------\n\n" RESET);
 }
 
 
@@ -209,7 +209,7 @@ void find_short_path(List *graph, int n) {
 	int count = 0;
 	for (int i = 0; i < n; i++) {
 		int choosed_ele = R[count];
-		if (choosed_ele == n) break;
+		if (choosed_ele == n - 1) break;
 		
 		// is graph[choosed_ele] contains nodes eles
 		for (int j = 0; j < nodes_len; j++) {
